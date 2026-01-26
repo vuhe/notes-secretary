@@ -5,9 +5,11 @@
   "type": "module",
   "description": "AI-driven secretary for notes",
   "scripts": {
-    "dev": "bunx --bun vite",
+    "dev:client": "bunx --bun vite",
+    "dev:server": "bun --watch src/server/index.ts",
+    "dev": "bun dev:client & bun dev:server",
     "build": "tsc -b && bunx --bun vite build",
-    "preview": "vite preview",
+    "start": "NODE_ENV=production bun src/server/index.ts",
     "lint": "biome check",
     "format": "biome format --write"
   },

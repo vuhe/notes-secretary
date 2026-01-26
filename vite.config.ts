@@ -12,4 +12,10 @@ export default defineConfig({
       },
     }),
   ],
+  server: {
+    // 开发模式下，将 API 请求转发给 Bun 服务器
+    proxy: {
+      "/api": "http://localhost:3000",
+    },
+  },
 });

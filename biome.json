@@ -69,9 +69,7 @@
         "useComponentExportOnlyModules": {
           "level": "error",
           "options": {
-            "allowExportNames": [
-              "metadata"
-            ]
+            "allowExportNames": ["metadata"]
           }
         }
       },
@@ -80,6 +78,18 @@
       }
     }
   },
+  "overrides": [
+    {
+      "includes": ["src/server/**/*.ts"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noConsole": "off"
+          }
+        }
+      }
+    }
+  ],
   "css": {
     "parser": {
       "tailwindDirectives": true
