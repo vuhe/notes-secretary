@@ -1,4 +1,5 @@
 import Bun from "bun";
+import { chatRequest } from "@/server/controller";
 
 Bun.serve({
   port: 3000,
@@ -8,10 +9,12 @@ Bun.serve({
     const path = url.pathname;
 
     if (path.startsWith("/api")) {
-      if (path === "/api/hello") {
-        return Response.json({ message: "Hello from Bun API!" });
+      switch (path) {
+        case "/api/chat":
+          return chatRequest(req);
+        default:
+          return new Response("Not Found", { status: 404 });
       }
-      return new Response("Not Found", { status: 404 });
     }
 
     // 默认为 index.html
