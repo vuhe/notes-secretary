@@ -51,7 +51,6 @@
       },
       "suspicious": {
         "noConsole": "warn",
-        "useGoogleFontDisplay": "error",
         "noImplicitAnyLet": "error",
         "noDocumentImportInPage": "error",
         "noHeadImportInDocument": "error"
@@ -66,19 +65,21 @@
         "noInferrableTypes": "error",
         "noParameterProperties": "error",
         "useSelfClosingElements": "error",
-        "useComponentExportOnlyModules": {
-          "level": "error",
-          "options": {
-            "allowExportNames": ["metadata"]
-          }
-        }
-      },
-      "performance": {
-        "noImgElement": "off"
+        "useComponentExportOnlyModules": "error"
       }
     }
   },
   "overrides": [
+    {
+      "includes": ["src/components/ai-elements/*.tsx", "src/components/ui/*.tsx"],
+      "linter": {
+        "rules": {
+          "style": {
+            "useComponentExportOnlyModules": "off"
+          }
+        }
+      }
+    },
     {
       "includes": ["src/server/**/*.ts"],
       "linter": {

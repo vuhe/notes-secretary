@@ -2,16 +2,17 @@
 @import "tw-animate-css";
 @import "katex/dist/katex.min.css"; /* for Markdown math support. required. */
 
-@source "../../node_modules/streamdown/dist/*.js";
+@source "../node_modules/streamdown/dist/*.js";
 
 @custom-variant dark (&:is(.dark *));
 
 /*noinspection CssUnresolvedCustomProperty*/
 @theme inline {
   --font-sans:
-          -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Helvetica Neue",
-          "Microsoft YaHei", sans-serif;
-  --font-mono: var(--font-jetbrains-mono);
+    -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Helvetica Neue",
+    "Microsoft YaHei", sans-serif;
+  --font-mono:
+    "JetBrains Mono", ui-monospace, "SF Mono", Monaco, Menlo, Consolas, "PingFang SC", monospace;
 
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);

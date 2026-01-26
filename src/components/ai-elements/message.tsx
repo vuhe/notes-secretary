@@ -258,7 +258,6 @@ export const MessageBranchPage = ({ className, ...props }: MessageBranchPageProp
 
 export type MessageResponseProps = ComponentProps<typeof Markdown>;
 
-// biome-ignore lint/style/useComponentExportOnlyModules: React.memo 组件
 export const MessageResponse = memo(
   ({ className, ...props }: MessageResponseProps) => (
     <Markdown

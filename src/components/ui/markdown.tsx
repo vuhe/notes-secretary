@@ -51,10 +51,7 @@ function safeId(id: string) {
   return `markdown-${safeStr}`;
 }
 
-export type MarkdownProps = Omit<
-  ComponentProps<typeof Streamdown>,
-  "linkSafety" | "plugins"
->;
+type MarkdownProps = Omit<ComponentProps<typeof Streamdown>, "linkSafety" | "plugins">;
 
 export function Markdown({ rehypePlugins, controls, className, ...props }: MarkdownProps) {
   const rehypePluginsWithDefault = rehypePlugins
