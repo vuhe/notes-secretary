@@ -1,6 +1,8 @@
 import type { FetchFunction } from "@ai-sdk/provider-utils";
+import { z } from "zod";
 import type { ChatMetadata } from "@/types/chat-metadata";
 import type { DisplayMessage } from "@/types/message";
+import { PersonaSchema } from "@/types/persona-params";
 
 export const proxy = ((input, init) => {
   let originalUrl: string;
@@ -27,6 +29,18 @@ export const proxy = ((input, init) => {
   // 如果是字符串或 URL，直接透传 init 参数即可
   return fetch(proxyUrl, init);
 }) as FetchFunction;
+
+export async function listPersonas() {
+  const response = await fetch("/api/personas");
+  if (!response.ok) throw new Error(`HTTP error: ${response.statusText}`);
+  // biome-ignore lint/nursery/useAwaitThenable: 误报
+  const personas: unknown[] = await response.json();
+  return personas.map((it) => {
+    const result = PersonaSchema.safeParse(it);
+    if (result.success) return result.data;
+    throw z.prettifyError(result.error);
+  });
+}
 
 export async function listChats() {
   const response = await fetch("/api/list");

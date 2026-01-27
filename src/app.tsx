@@ -1,9 +1,11 @@
 import { ThemeProvider } from "next-themes";
 import { useEffect } from "react";
 import { ChatPage } from "@/components/chat-page";
+import { ChatPersona } from "@/components/chat-persona";
 import { ChatTitle } from "@/components/chat-title";
 import { ChatUsage } from "@/components/chat-usage";
 import { NavSidebar } from "@/components/navigation";
+import { ButtonGroup } from "@/components/ui/button-group";
 import { Separator } from "@/components/ui/separator";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { Toaster } from "@/components/ui/sonner";
@@ -31,7 +33,10 @@ export function App() {
               <SidebarTrigger className="-ml-1" />
               <Separator orientation="vertical" className="mr-2 data-[orientation=vertical]:h-4" />
               <ChatTitle />
-              <ChatUsage />
+              <ButtonGroup className="ml-auto">
+                <ChatPersona />
+                <ChatUsage />
+              </ButtonGroup>
             </div>
           </header>
 

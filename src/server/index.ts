@@ -1,5 +1,5 @@
 import Bun from "bun";
-import { chatRequest, listRequest, loadRequest } from "@/server/controller";
+import { chatRequest, listRequest, loadRequest, personasRequest } from "@/server/controller";
 
 Bun.serve({
   port: 3000,
@@ -9,6 +9,11 @@ Bun.serve({
     const path = url.pathname;
 
     if (path.startsWith("/api")) {
+      // persona 相关 api
+      if (path === "/api/personas") {
+        return personasRequest();
+      }
+      // 对话相关 api
       if (path === "/api/chat") {
         return chatRequest(req);
       }

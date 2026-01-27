@@ -1,5 +1,12 @@
 import { safeErrorString } from "@/lib/errors";
 import type { ChatMetadata } from "@/types/chat-metadata";
+import type { PersonaParams } from "@/types/persona-params";
+
+export async function personasRequest() {
+  // TODO: 查找并返回信息
+  const list: PersonaParams[] = [];
+  return Response.json(list);
+}
 
 export async function chatRequest(req: Request) {
   // 从查询参数获取被编码的原始目标 URL
