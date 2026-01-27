@@ -1,5 +1,5 @@
 import Bun from "bun";
-import { chatRequest } from "@/server/controller";
+import { chatRequest, listRequest, loadRequest } from "@/server/controller";
 
 Bun.serve({
   port: 3000,
@@ -9,12 +9,17 @@ Bun.serve({
     const path = url.pathname;
 
     if (path.startsWith("/api")) {
-      switch (path) {
-        case "/api/chat":
-          return chatRequest(req);
-        default:
-          return new Response("Not Found", { status: 404 });
+      if (path === "/api/chat") {
+        return chatRequest(req);
       }
+      if (path === "/api/list") {
+        return listRequest();
+      }
+      if (path.startsWith("/api/load/")) {
+        const id = path.replace("/api/load/", "");
+        return loadRequest(id);
+      }
+      return new Response("Not Found", { status: 404 });
     }
 
     if (process.env.NODE_ENV === "production") {

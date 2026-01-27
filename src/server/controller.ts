@@ -1,4 +1,5 @@
 import { safeErrorString } from "@/lib/errors";
+import type { ChatMetadata } from "@/types/chat-metadata";
 
 export async function chatRequest(req: Request): Promise<Response> {
   // 从查询参数获取被编码的原始目标 URL
@@ -19,4 +20,15 @@ export async function chatRequest(req: Request): Promise<Response> {
   } catch (e) {
     return new Response(`Proxy Error: ${safeErrorString(e)}`, { status: 500 });
   }
+}
+
+export async function listRequest() {
+  // TODO: 查找文件夹并返回对话的信息
+  const list: ChatMetadata[] = [{ id: "test", title: "test" }];
+  return Response.json(list);
+}
+
+export async function loadRequest(_id: string) {
+  // TODO
+  return new Response("Not Found", { status: 404 });
 }
