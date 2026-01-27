@@ -1,4 +1,4 @@
-import { MessageSquarePlusIcon, MoreHorizontal, SquarePenIcon } from "lucide-react";
+import { MessageSquarePlusIcon, MoreHorizontal } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -6,7 +6,6 @@ import {
   SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
-  SidebarMenuAction,
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
@@ -24,7 +23,6 @@ function NavChats() {
         {chats.map((item) => (
           <SidebarMenuItem key={item.title}>
             <SidebarMenuButton
-              asChild
               isActive={item.id === chatId}
               onClick={() => {
                 useNavigation.getState().loadChat(item.id);
@@ -32,9 +30,6 @@ function NavChats() {
             >
               {item.title}
             </SidebarMenuButton>
-            <SidebarMenuAction showOnHover>
-              <SquarePenIcon />
-            </SidebarMenuAction>
           </SidebarMenuItem>
         ))}
         <SidebarMenuItem>
@@ -64,9 +59,7 @@ export function NavSidebar() {
           <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
             <MessageSquarePlusIcon className="size-4" />
           </div>
-          <div className="grid flex-1 text-left text-sm leading-tight">
-            <span className="truncate font-medium">开启新对话</span>
-          </div>
+          <div className="flex-1 text-left text-lg leading-tight">开启新对话</div>
         </SidebarMenuButton>
       </SidebarHeader>
       <SidebarContent>
