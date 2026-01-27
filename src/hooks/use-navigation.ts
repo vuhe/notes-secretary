@@ -19,13 +19,11 @@ interface NavId {
   usage?: LanguageModelUsage;
   /** 文件的总结缓存 */
   files: Readonly<Record<string, string>>;
-  checkpoint: number;
 
   newChat: () => void;
   loadChat: (id: string) => void;
   updateUsage: (id: string, usage: LanguageModelUsage) => void;
   updateFile: (id: string, key: string, value: string) => void;
-  updateCheckpoint: (id: string, value: number) => void;
   loadMessages: (setter: MessagesSetter) => Promise<void>;
 }
 
@@ -38,11 +36,11 @@ export const useNavigation: ReadonlyStore<NavId> = create((set, get) => ({
 
   newChat: () => {
     const id = idGenerator();
-    set({ id, requireLoading: false, loading: false, usage: undefined, files: {}, checkpoint: 0 });
+    set({ id, requireLoading: false, loading: false, usage: undefined, files: {} });
   },
 
   loadChat: (id) => {
-    set({ id, requireLoading: true, loading: false, usage: undefined, files: {}, checkpoint: 0 });
+    set({ id, requireLoading: true, loading: false, usage: undefined, files: {} });
   },
 
   updateUsage: (id, usage) => {
@@ -55,11 +53,6 @@ export const useNavigation: ReadonlyStore<NavId> = create((set, get) => ({
     set((status) => ({ files: { ...status.files, [key]: value } }));
   },
 
-  updateCheckpoint: (id, checkpoint) => {
-    if (id !== get().id) return;
-    set({ checkpoint });
-  },
-
   loadMessages: async (setter) => {
     const capturedId = get().id;
     set({ requireLoading: false, loading: true });
@@ -70,7 +63,6 @@ export const useNavigation: ReadonlyStore<NavId> = create((set, get) => ({
       // 防止在拉取对话期间点击其他对话造成状态不一致
       if (capturedId === get().id) {
         setter(messages);
-        set({ checkpoint: messages.length });
       }
     } catch (error) {
       toast.error("载入对话失败", {

@@ -1,7 +1,7 @@
 import { safeErrorString } from "@/lib/errors";
 import type { ChatMetadata } from "@/types/chat-metadata";
 
-export async function chatRequest(req: Request): Promise<Response> {
+export async function chatRequest(req: Request) {
   // 从查询参数获取被编码的原始目标 URL
   const url = new URL(req.url);
   const targetUrl = url.searchParams.get("url");
