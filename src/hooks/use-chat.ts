@@ -4,23 +4,32 @@ import { toast } from "sonner";
 import { useNavigation } from "@/hooks/use-navigation";
 import { usePrompt } from "@/hooks/use-prompt";
 import { Agent } from "@/lib/agent";
-import { safeErrorString } from "@/lib/errors";
+import { safeError, safeErrorString } from "@/lib/errors";
+import { loadChat } from "@/lib/invoke";
 
 export function useChat() {
   const id = useNavigation((state) => state.id);
-  const requireLoading = useNavigation((state) => state.requireLoading);
 
   const { messages, sendMessage, status, setMessages, stop, error, clearError } = useAiChat({
     id: id,
     transport: new Agent(),
   });
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: 监听 requireLoading 变化
   useEffect(() => {
-    const state = useNavigation.getState();
-    if (!state.requireLoading || state.loading) return;
-    void state.loadMessages(setMessages);
-  }, [requireLoading, setMessages]);
+    if (id !== useNavigation.getState().id) return;
+    if (!useNavigation.getState().loading) return;
+
+    loadChat(id)
+      .then((messages) => {
+        if (id !== useNavigation.getState().id) return;
+        setMessages(messages);
+        useNavigation.getState().updateLoading(id, false);
+      })
+      .catch((error: unknown) => {
+        if (id !== useNavigation.getState().id) return;
+        useNavigation.getState().updateLoading(id, safeError(error));
+      });
+  }, [id, setMessages]);
 
   const handleSubmit = useCallback(
     (event: FormEvent<HTMLFormElement>) => {

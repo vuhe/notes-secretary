@@ -1,30 +1,23 @@
 import { createIdGenerator, type LanguageModelUsage } from "ai";
-import { toast } from "sonner";
 import { create, type StoreApi, type UseBoundStore } from "zustand";
-import { safeErrorString } from "@/lib/errors";
-import { loadChat } from "@/lib/invoke";
-import type { DisplayMessage } from "@/types/message";
 
 type ReadonlyStoreApi<T> = Pick<StoreApi<T>, "getState" | "getInitialState" | "subscribe">;
 type ReadonlyStore<T> = UseBoundStore<ReadonlyStoreApi<T>>;
-
-type MessagesSetter = (messages: DisplayMessage[]) => void;
 
 const idGenerator = createIdGenerator({ prefix: "chat" });
 
 interface NavId {
   id: string;
-  requireLoading: boolean;
-  loading: boolean;
+  loading: boolean | Error;
   usage?: LanguageModelUsage;
   /** 文件的总结缓存 */
   files: Readonly<Record<string, string>>;
 
   newChat: () => void;
   loadChat: (id: string) => void;
+  updateLoading: (id: string, loading: boolean | Error) => void;
   updateUsage: (id: string, usage: LanguageModelUsage) => void;
   updateFile: (id: string, key: string, value: string) => void;
-  loadMessages: (setter: MessagesSetter) => Promise<void>;
 }
 
 export const useNavigation: ReadonlyStore<NavId> = create((set, get) => ({
@@ -36,11 +29,16 @@ export const useNavigation: ReadonlyStore<NavId> = create((set, get) => ({
 
   newChat: () => {
     const id = idGenerator();
-    set({ id, requireLoading: false, loading: false, usage: undefined, files: {} });
+    set({ id, loading: false, usage: undefined, files: {} });
   },
 
   loadChat: (id) => {
-    set({ id, requireLoading: true, loading: false, usage: undefined, files: {} });
+    set({ id, loading: true, usage: undefined, files: {} });
+  },
+
+  updateLoading: (id, loading) => {
+    if (id !== get().id) return;
+    set({ loading });
   },
 
   updateUsage: (id, usage) => {
@@ -51,29 +49,5 @@ export const useNavigation: ReadonlyStore<NavId> = create((set, get) => ({
   updateFile: (id, key, value) => {
     if (id !== get().id) return;
     set((status) => ({ files: { ...status.files, [key]: value } }));
-  },
-
-  loadMessages: async (setter) => {
-    const capturedId = get().id;
-    set({ requireLoading: false, loading: true });
-
-    try {
-      const messages = await loadChat(capturedId);
-
-      // 防止在拉取对话期间点击其他对话造成状态不一致
-      if (capturedId === get().id) {
-        setter(messages);
-      }
-    } catch (error) {
-      toast.error("载入对话失败", {
-        description: safeErrorString(error),
-        closeButton: true,
-      });
-    } finally {
-      // 防止在拉取对话期间点击其他对话造成状态不一致
-      if (capturedId === get().id) {
-        set({ loading: false });
-      }
-    }
   },
 }));

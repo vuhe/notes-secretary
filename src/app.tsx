@@ -1,8 +1,8 @@
 import { ThemeProvider } from "next-themes";
 import { useEffect } from "react";
+import { ChatPage } from "@/components/chat-page";
 import { ChatTitle } from "@/components/chat-title";
 import { ChatUsage } from "@/components/chat-usage";
-import { LoadingChat } from "@/components/loading-chat";
 import { NavSidebar } from "@/components/navigation";
 import { Separator } from "@/components/ui/separator";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
@@ -36,9 +36,7 @@ export function App() {
           </header>
 
           <div className="flex-1 flex justify-center size-full">
-            <div className="@container/main flex flex-col min-h-0 size-full max-w-190">
-              <LoadingChat />
-            </div>
+            <ChatPage />
           </div>
         </SidebarInset>
       </SidebarProvider>
