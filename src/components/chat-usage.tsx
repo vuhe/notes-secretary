@@ -77,7 +77,7 @@ const UsageTrigger = ({ persona, usage }: ChatUsageProps) => {
 
   return (
     <PopoverTrigger asChild>
-      <Button type="button">
+      <Button type="button" variant="outline">
         <span className="font-mono font-medium text-muted-foreground">{renderedPercent}</span>
         <UsageIcon persona={persona} usage={usage} />
       </Button>

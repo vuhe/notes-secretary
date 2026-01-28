@@ -6,6 +6,7 @@ import {
   ConversationEmptyState,
   ConversationScrollButton,
 } from "@/components/ai-elements/conversation";
+import { ChatInput } from "@/components/chat-input";
 import { ChatMessages } from "@/components/chat-message";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -113,7 +114,7 @@ export function ChatPage() {
             </ConversationContent>
             <ConversationScrollButton />
           </Conversation>
-          {/*<ChatInput status={status} handleSubmit={handleSubmit} />*/}
+          <ChatInput status={status} handleSubmit={handleSubmit} />
         </MainContainer>
       ) : (
         <MainContainer key="error">

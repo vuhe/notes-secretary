@@ -26,7 +26,7 @@ export function ChatPersona() {
   return (
     <Dialog onOpenChange={setOpen} open={open}>
       <DialogTrigger asChild>
-        <Button type="button">
+        <Button type="button" variant="outline">
           <DramaIcon size={16} />
           <span className={cn("font-medium", selected === undefined && "text-muted-foreground")}>
             {selected?.id ?? "请选择 Persona"}
