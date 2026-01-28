@@ -1,11 +1,9 @@
 import { safeErrorString } from "@/lib/errors";
+import { personas } from "@/server/config";
 import type { ChatMetadata } from "@/types/chat-metadata";
-import type { PersonaParams } from "@/types/persona-params";
 
 export async function personasRequest() {
-  // TODO: 查找并返回信息
-  const list: PersonaParams[] = [];
-  return Response.json(list);
+  return Response.json(personas);
 }
 
 export async function chatRequest(req: Request) {

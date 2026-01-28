@@ -30,15 +30,12 @@ export interface SendMessageOptionBody {
   chatId: string;
 }
 
-async function readChatFile(chatId: string, url: string) {
-  const chat = useNavigation.getState();
-  let summary: string | undefined;
-  if (chat.id === chatId) {
-    summary = chat.files[url];
-  }
-  if (summary) {
-    return summary;
-  }
+async function readChatFile(_chatId: string, url: string) {
+  const summary = useNavigation.getState().files[url];
+  if (summary) return summary;
+
+  // TODO: 如果存在总结 AI 进行总结并保存后返回
+
   return fetchFile(url);
 }
 

@@ -83,16 +83,15 @@ export const usePrompt: ReadonlyStore<PromptContext> = create((set, get) => ({
     const text = get().text;
     const attachments = get().files;
 
-    // // 是否上传了不支持的文件筛查
-    // for (const file of files) {
-    //   // TODO: 需要检查是否有文档总结 AI
-    //   // biome-ignore lint/nursery/useAwaitThenable: 误报
-    //   const isSupportedFile = (await persona.supportedFile(file.mediaType)) || false;
-    //   if (!isSupportedFile) {
-    //     const filename = file.filename ? ` '${file.filename}' ` : "";
-    //     throw new Error(`模型不支持${filename}文件且无法转换为文本摘要`);
-    //   }
-    // }
+    // 是否上传了不支持的文件筛查
+    for (const file of attachments) {
+      // TODO: 需要检查是否有文档总结 AI
+      // biome-ignore lint/nursery/useAwaitThenable: 误报
+      const isSupportedFile = (await persona.supportedFile(file.file.type)) || false;
+      if (!isSupportedFile) {
+        throw new Error(`模型不支持 '${file.file.name}' 文件且无法转换为文本摘要`);
+      }
+    }
 
     const files = await Promise.all(
       attachments.map(async (file): Promise<FileUIPart> => {
