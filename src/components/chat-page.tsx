@@ -48,28 +48,6 @@ function LoadingChat() {
   );
 }
 
-function LoadingChatError({ error }: { error: Error }) {
-  const retry = () => {
-    const id = useNavigation.getState().id;
-    useNavigation.getState().loadChat(id);
-  };
-
-  return (
-    <Empty className="select-none">
-      <EmptyHeader>
-        <EmptyMedia variant="icon">
-          <TriangleAlertIcon />
-        </EmptyMedia>
-        <EmptyTitle>对话加载错误</EmptyTitle>
-        <EmptyDescription>{error.message}</EmptyDescription>
-      </EmptyHeader>
-      <EmptyContent className="flex-row justify-center gap-2">
-        <Button onClick={retry}>重试</Button>
-      </EmptyContent>
-    </Empty>
-  );
-}
-
 function ChatEmpty({ empty }: { empty: boolean }) {
   if (!empty) return null;
 
@@ -84,7 +62,7 @@ function ChatEmpty({ empty }: { empty: boolean }) {
 
 export function ChatPage() {
   const loading = useNavigation((state) => state.loading);
-  const { messages, status, error, handleSubmit } = useChat();
+  const { retryLoading, messages, status, error, handleSubmit } = useChat();
 
   return (
     <AnimatePresence mode="wait">
@@ -118,7 +96,18 @@ export function ChatPage() {
         </MainContainer>
       ) : (
         <MainContainer key="error">
-          <LoadingChatError error={loading} />
+          <Empty className="select-none">
+            <EmptyHeader>
+              <EmptyMedia variant="icon">
+                <TriangleAlertIcon />
+              </EmptyMedia>
+              <EmptyTitle>对话加载错误</EmptyTitle>
+              <EmptyDescription>{loading.message}</EmptyDescription>
+            </EmptyHeader>
+            <EmptyContent className="flex-row justify-center gap-2">
+              <Button onClick={retryLoading}>重试</Button>
+            </EmptyContent>
+          </Empty>
         </MainContainer>
       )}
     </AnimatePresence>

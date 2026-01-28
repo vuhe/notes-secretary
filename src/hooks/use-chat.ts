@@ -31,6 +31,22 @@ export function useChat() {
       });
   }, [id, setMessages]);
 
+  const retryLoading = () => {
+    const capturedId = id;
+    useNavigation.getState().updateLoading(id, true);
+
+    loadChat(capturedId)
+      .then((messages) => {
+        if (capturedId !== useNavigation.getState().id) return;
+        setMessages(messages);
+        useNavigation.getState().updateLoading(capturedId, false);
+      })
+      .catch((error: unknown) => {
+        if (capturedId !== useNavigation.getState().id) return;
+        useNavigation.getState().updateLoading(capturedId, safeError(error));
+      });
+  };
+
   const handleSubmit = useCallback(
     (event: FormEvent<HTMLFormElement>) => {
       event.preventDefault();
@@ -62,6 +78,7 @@ export function useChat() {
   );
 
   return {
+    retryLoading,
     messages,
     status,
     error,
