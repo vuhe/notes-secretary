@@ -29,7 +29,7 @@ function MainContainer(props: HTMLMotionProps<"div">) {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.2 }}
-      className="@container/main flex flex-col min-h-0 size-full max-w-190"
+      className="@container/main flex flex-col items-center min-h-0 size-full"
       {...props}
     />
   );
@@ -72,8 +72,8 @@ export function ChatPage() {
         </MainContainer>
       ) : loading === false ? (
         <MainContainer key="content">
-          <Conversation className="h-full">
-            <ConversationContent>
+          <Conversation className="size-full">
+            <ConversationContent className="max-w-190 mx-auto">
               <ChatEmpty empty={messages.length === 0} />
               <ChatMessages messages={messages} status={status} />
               {status === "submitted" && (

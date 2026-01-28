@@ -9,7 +9,7 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
-import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useConfig } from "@/hooks/use-config";
 import { usePrompt } from "@/hooks/use-prompt";
 import { cn } from "@/lib/utils";
@@ -24,17 +24,16 @@ export function ChatPersona() {
   const [open, setOpen] = useState(false);
 
   return (
-    <Dialog onOpenChange={setOpen} open={open}>
-      <DialogTrigger asChild>
+    <Popover onOpenChange={setOpen} open={open}>
+      <PopoverTrigger asChild>
         <Button type="button" variant="outline">
           <DramaIcon size={16} />
           <span className={cn("font-medium", selected === undefined && "text-muted-foreground")}>
             {selected?.id ?? "请选择 Persona"}
           </span>
         </Button>
-      </DialogTrigger>
-      <DialogContent className="p-0 **:data-[slot=dialog-close]:top-3">
-        <DialogTitle className="sr-only">Persona Selector</DialogTitle>
+      </PopoverTrigger>
+      <PopoverContent className="w-45 p-0 **:data-[slot=dialog-close]:top-3">
         <Command className="**:data-[slot=command-input-wrapper]:h-auto">
           <CommandInput placeholder="搜索 Persona..." />
           <CommandList>
@@ -59,7 +58,7 @@ export function ChatPersona() {
             ))}
           </CommandList>
         </Command>
-      </DialogContent>
-    </Dialog>
+      </PopoverContent>
+    </Popover>
   );
 }

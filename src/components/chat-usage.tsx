@@ -175,7 +175,7 @@ export function ChatUsage() {
   return (
     <Popover>
       <UsageTrigger persona={persona} usage={usage} />
-      <PopoverContent className="w-50 divide-y overflow-hidden p-0 select-none">
+      <PopoverContent align="end" className="w-50 divide-y overflow-hidden p-0 select-none">
         <UsageContentHeader persona={persona} usage={usage} />
         <UsageInput usage={usage} />
         <UsageOutput usage={usage} />

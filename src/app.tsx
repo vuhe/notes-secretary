@@ -19,9 +19,9 @@ export function App() {
 
   return (
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-      <SidebarProvider>
+      <SidebarProvider className="h-svh">
         <NavSidebar />
-        <SidebarInset className="justify-center">
+        <SidebarInset>
           <header
             className={cn(
               "flex h-16 shrink-0 items-center gap-2",
@@ -40,7 +40,7 @@ export function App() {
             </div>
           </header>
 
-          <div className="flex-1 flex justify-center size-full">
+          <div className="flex-1 flex w-full min-h-0">
             <ChatPage />
           </div>
         </SidebarInset>

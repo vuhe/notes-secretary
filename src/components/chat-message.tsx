@@ -62,21 +62,21 @@ function AgentMessage({ message, showActions, isStreaming }: AgentMessageProps) 
           case "text":
             return (
               <Message key={`${message.id}-${i}`} from={message.role}>
-                <MessageContent>
+                <MessageContent className="text-base">
                   <MessageResponse>{part.text}</MessageResponse>
                 </MessageContent>
                 {showActions && (
                   <MessageActions>
                     <MessageAction onClick={() => {}} size="sm">
                       <GitBranchPlusIcon className="size-3" />
-                      <span className="text-muted-foreground text-xs">派生分支</span>
+                      <span className="text-muted-foreground">派生分支</span>
                     </MessageAction>
                     <MessageAction
                       onClick={() => void navigator.clipboard.writeText(part.text)}
                       size="sm"
                     >
                       <CopyIcon className="size-3" />
-                      <span className="text-muted-foreground text-xs">复制内容</span>
+                      <span className="text-muted-foreground">复制内容</span>
                     </MessageAction>
                   </MessageActions>
                 )}

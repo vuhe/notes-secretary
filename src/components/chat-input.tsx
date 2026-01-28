@@ -302,7 +302,7 @@ export function ChatInput({ status, handleSubmit }: ChatInputProps) {
   }, []);
 
   return (
-    <form className="w-full px-2 pb-8" onSubmit={handleSubmit}>
+    <form className="w-full max-w-190 px-2 pb-8" onSubmit={handleSubmit}>
       <InputGroup className="overflow-hidden">
         <PromptInputAttachments />
         <div className="contents">

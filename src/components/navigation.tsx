@@ -1,4 +1,4 @@
-import { MessageSquarePlusIcon, MoreHorizontal } from "lucide-react";
+import { MessageSquarePlusIcon } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -23,6 +23,7 @@ function NavChats() {
         {chats.map((item) => (
           <SidebarMenuItem key={item.title}>
             <SidebarMenuButton
+              className="text-base"
               isActive={item.id === chatId}
               onClick={() => {
                 useNavigation.getState().loadChat(item.id);
@@ -32,13 +33,16 @@ function NavChats() {
             </SidebarMenuButton>
           </SidebarMenuItem>
         ))}
-        <SidebarMenuItem>
-          <SidebarMenuButton className="text-sidebar-foreground/70">
-            <MoreHorizontal className="text-sidebar-foreground/70" />
-            <span>More</span>
-          </SidebarMenuButton>
-        </SidebarMenuItem>
       </SidebarMenu>
+      {chats.length === 0 && (
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton className="text-base justify-center" disabled>
+              开启新对话聊点什么吧～
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      )}
     </SidebarGroup>
   );
 }
