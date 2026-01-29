@@ -1,8 +1,10 @@
+import { join } from "node:path";
+import Bun from "bun";
 import { safeErrorString } from "@/lib/errors";
-import { personas } from "@/server/config";
+import { configDir, personas } from "@/server/config";
 import type { ChatMetadata } from "@/types/chat-metadata";
 
-export async function personasRequest() {
+export function personasRequest() {
   return Response.json(personas);
 }
 
@@ -33,7 +35,27 @@ export async function listRequest() {
   return Response.json(list);
 }
 
-export async function loadRequest(_id: string) {
-  // TODO
-  return new Response("Not Found", { status: 404 });
+export async function loadRequest(id: string) {
+  try {
+    const path = join(configDir, id, "messages.json");
+    const file = Bun.file(path);
+
+    // biome-ignore lint/nursery/useAwaitThenable: 误报
+    if (!(await file.exists())) return new Response("Not Found", { status: 404 });
+
+    return new Response(file.stream(), { headers: { "Content-Type": "application/json" } });
+  } catch (error) {
+    return new Response(safeErrorString(error), { status: 500 });
+  }
+}
+
+export async function saveRequest(id: string, body: Promise<ArrayBufferLike>) {
+  try {
+    const path = join(configDir, id, "messages.json");
+    // biome-ignore lint/nursery/useAwaitThenable: 误报
+    await Bun.write(path, await body);
+    return new Response();
+  } catch (error) {
+    return new Response(safeErrorString(error), { status: 500 });
+  }
 }

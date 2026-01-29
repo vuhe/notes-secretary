@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/nursery/useAwaitThenable: 误报 */
 import type { FetchFunction } from "@ai-sdk/provider-utils";
 import { z } from "zod";
 import type { ChatMetadata } from "@/types/chat-metadata";
@@ -33,7 +34,6 @@ export const proxy = ((input, init) => {
 export async function listPersonas() {
   const response = await fetch("/api/personas");
   if (!response.ok) throw new Error(`HTTP error: ${response.statusText}`);
-  // biome-ignore lint/nursery/useAwaitThenable: 误报
   const personas: unknown[] = await response.json();
   return personas.map((it) => {
     const result = PersonaSchema.safeParse(it);
@@ -45,15 +45,13 @@ export async function listPersonas() {
 export async function listChats() {
   const response = await fetch("/api/list");
   if (!response.ok) throw new Error(`HTTP error: ${response.statusText}`);
-  // biome-ignore lint/nursery/useAwaitThenable: 误报
   const chats: ChatMetadata[] = await response.json();
   return chats;
 }
 
 export async function loadChat(id: string) {
   const response = await fetch(`/api/load/${id}`);
-  if (!response.ok) throw new Error(`HTTP error: ${response.statusText}`);
-  // biome-ignore lint/nursery/useAwaitThenable: 误报
+  if (!response.ok) throw new Error(await response.text());
   const messages: DisplayMessage[] = await response.json();
   return messages;
 }
@@ -64,7 +62,7 @@ export async function saveChat(id: string, messages: DisplayMessage[]) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(messages, null, 2),
   });
-  if (!response.ok) throw new Error(`HTTP error: ${response.statusText}`);
+  if (!response.ok) throw new Error(await response.text());
 }
 
 interface UploadFileProps {

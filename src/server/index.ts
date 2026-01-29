@@ -1,5 +1,11 @@
 import Bun from "bun";
-import { chatRequest, listRequest, loadRequest, personasRequest } from "@/server/controller";
+import {
+  chatRequest,
+  listRequest,
+  loadRequest,
+  personasRequest,
+  saveRequest,
+} from "@/server/controller";
 
 Bun.serve({
   port: 3000,
@@ -23,6 +29,10 @@ Bun.serve({
       if (path.startsWith("/api/load/")) {
         const id = path.replace("/api/load/", "");
         return loadRequest(id);
+      }
+      if (path.startsWith("/api/save/")) {
+        const id = path.replace("/api/save/", "");
+        return saveRequest(id, req.arrayBuffer());
       }
       return new Response("Not Found", { status: 404 });
     }
