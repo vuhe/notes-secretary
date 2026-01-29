@@ -149,6 +149,7 @@ export const ReasoningTrigger = memo(
 );
 
 export type ReasoningContentProps = ComponentProps<typeof CollapsibleContent> & {
+  isAnimating?: boolean;
   children: string;
 };
 

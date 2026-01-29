@@ -63,7 +63,9 @@ function AgentMessage({ message, showActions, isStreaming }: AgentMessageProps) 
             return (
               <Message key={`${message.id}-${i}`} from={message.role}>
                 <MessageContent className="text-base">
-                  <MessageResponse>{part.text}</MessageResponse>
+                  <MessageResponse isAnimating={part.state === "streaming"}>
+                    {part.text}
+                  </MessageResponse>
                 </MessageContent>
                 {showActions && (
                   <MessageActions>
@@ -90,7 +92,9 @@ function AgentMessage({ message, showActions, isStreaming }: AgentMessageProps) 
                 isStreaming={isStreaming && i === message.parts.length - 1}
               >
                 <ReasoningTrigger />
-                <ReasoningContent>{part.text}</ReasoningContent>
+                <ReasoningContent isAnimating={part.state === "streaming"}>
+                  {part.text}
+                </ReasoningContent>
               </Reasoning>
             );
           // TODO: 工具显示需要更加细化 ToolUIPart<TOOLS> | DynamicToolUIPart
