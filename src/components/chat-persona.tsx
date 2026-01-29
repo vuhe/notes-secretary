@@ -28,7 +28,12 @@ export function ChatPersona() {
       <PopoverTrigger asChild>
         <Button type="button" variant="outline">
           <DramaIcon size={16} />
-          <span className={cn("font-medium", selected === undefined && "text-muted-foreground")}>
+          <span
+            className={cn(
+              "hidden @[760px]/header:block",
+              selected === undefined && "text-muted-foreground",
+            )}
+          >
             {selected?.id ?? "请选择 Persona"}
           </span>
         </Button>
