@@ -1,5 +1,6 @@
 /** biome-ignore-all lint/nursery/useAwaitThenable: 误报 */
 import type { FetchFunction } from "@ai-sdk/provider-utils";
+import mime from "mime-types";
 import { z } from "zod";
 import type { ChatMetadata } from "@/types/chat-metadata";
 import type { DisplayMessage } from "@/types/message";
@@ -72,17 +73,16 @@ interface UploadFileProps {
 }
 
 export async function uploadFile(props: UploadFileProps) {
-  const url = `/api/files/${props.chatId}/${props.fileId}`;
+  const ext = mime.extension(props.file.type) || "data";
+  const url = `/api/files/${props.chatId}/${props.fileId}.${ext}`;
 
   const formData = new FormData();
   formData.append("file", props.file);
-  formData.append("fileId", props.fileId);
-  formData.append("chatId", props.chatId);
-
   const response = await fetch(url, {
     method: "POST",
     body: formData,
   });
+
   if (!response.ok) throw new Error(`HTTP error: ${response.statusText}`);
 
   return url;

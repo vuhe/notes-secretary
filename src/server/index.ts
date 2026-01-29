@@ -1,6 +1,7 @@
 import Bun from "bun";
 import {
   chatRequest,
+  fileRequest,
   listRequest,
   loadRequest,
   personasRequest,
@@ -19,6 +20,7 @@ Bun.serve({
       if (path === "/api/personas") {
         return personasRequest();
       }
+
       // 对话相关 api
       if (path === "/api/chat") {
         return chatRequest(req);
@@ -34,6 +36,16 @@ Bun.serve({
         const id = path.replace("/api/save/", "");
         return saveRequest(id, req.arrayBuffer());
       }
+
+      // 文件相关 api
+      if (path.startsWith("/api/files/")) {
+        const paths = path.replace("/api/files/", "");
+        const [chatId, fileId] = paths.split("/");
+        if (req.method === "POST") return fileRequest(chatId, fileId, req.formData());
+        return fileRequest(chatId, fileId);
+      }
+
+      // 其他请求不应该存在
       return new Response("Not Found", { status: 404 });
     }
 
