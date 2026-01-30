@@ -1,8 +1,8 @@
 import type { LanguageModelUsage } from "ai";
 
-import { Button } from "@/components/ui/button";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Progress } from "@/components/ui/progress";
+import { Button } from "@/components/shadcn/button";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/shadcn/popover";
+import { Progress } from "@/components/shadcn/progress";
 import { useNavigation } from "@/hooks/use-navigation";
 import { usePrompt } from "@/hooks/use-prompt";
 import type { Persona } from "@/lib/persona";
@@ -76,12 +76,14 @@ const UsageTrigger = ({ persona, usage }: ChatUsageProps) => {
   }).format(usedPercent);
 
   return (
-    <PopoverTrigger asChild>
-      <Button type="button" variant="outline">
-        <span className="font-mono font-medium text-muted-foreground">{renderedPercent}</span>
-        <UsageIcon persona={persona} usage={usage} />
-      </Button>
-    </PopoverTrigger>
+    <PopoverTrigger
+      render={(props) => (
+        <Button type="button" variant="outline" {...props}>
+          <span className="font-mono font-medium text-muted-foreground">{renderedPercent}</span>
+          <UsageIcon persona={persona} usage={usage} />
+        </Button>
+      )}
+    />
   );
 };
 
@@ -175,7 +177,7 @@ export function ChatUsage() {
   return (
     <Popover>
       <UsageTrigger persona={persona} usage={usage} />
-      <PopoverContent align="end" className="w-50 divide-y overflow-hidden p-0 select-none">
+      <PopoverContent align="end" className="w-50 divide-y overflow-hidden p-0 select-none gap-0">
         <UsageContentHeader persona={persona} usage={usage} />
         <UsageInput usage={usage} />
         <UsageOutput usage={usage} />

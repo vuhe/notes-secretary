@@ -1,6 +1,10 @@
 import { ChevronDownIcon, SearchIcon } from "lucide-react";
 import type { ComponentProps } from "react";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/shadcn/collapsible";
 import { cn } from "@/lib/utils";
 
 export type TaskItemFileProps = ComponentProps<"div">;
@@ -31,21 +35,24 @@ export const Task = ({ defaultOpen = true, className, ...props }: TaskProps) => 
   <Collapsible className={cn(className)} defaultOpen={defaultOpen} {...props} />
 );
 
-export type TaskTriggerProps = ComponentProps<typeof CollapsibleTrigger> & {
+export type TaskTriggerProps = Omit<ComponentProps<typeof CollapsibleTrigger>, "children"> & {
   title: string;
 };
 
-export const TaskTrigger = ({ children, className, title, ...props }: TaskTriggerProps) => (
-  <CollapsibleTrigger asChild className={cn("group", className)} {...props}>
-    {children ?? (
+export const TaskTrigger = ({ className, title, render, ...props }: TaskTriggerProps) => {
+  if (render) {
+    return <CollapsibleTrigger className={cn("group", className)} render={render} {...props} />;
+  }
+  return (
+    <CollapsibleTrigger className={cn("group", className)} {...props}>
       <div className="flex w-full cursor-pointer items-center gap-2 text-muted-foreground text-sm transition-colors hover:text-foreground">
         <SearchIcon className="size-4" />
         <p className="text-sm">{title}</p>
         <ChevronDownIcon className="size-4 transition-transform group-data-[state=open]:rotate-180" />
       </div>
-    )}
-  </CollapsibleTrigger>
-);
+    </CollapsibleTrigger>
+  );
+};
 
 export type TaskContentProps = ComponentProps<typeof CollapsibleContent>;
 

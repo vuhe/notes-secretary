@@ -11,23 +11,23 @@ import {
 import {
   type ChangeEventHandler,
   type ClipboardEventHandler,
-  type FormEvent,
   type KeyboardEventHandler,
+  type SubmitEventHandler,
   useEffect,
   useLayoutEffect,
   useRef,
   useState,
 } from "react";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/shadcn/button";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupButton,
   InputGroupTextarea,
-} from "@/components/ui/input-group";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Skeleton } from "@/components/ui/skeleton";
+} from "@/components/shadcn/input-group";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/shadcn/popover";
+import { Skeleton } from "@/components/shadcn/skeleton";
 import { type AttachmentPart, usePrompt } from "@/hooks/use-prompt";
 import { cn } from "@/lib/utils";
 
@@ -69,50 +69,53 @@ function PromptInputAttachments() {
     <div className="flex flex-wrap items-center gap-2 px-3 pt-3 w-full">
       {files.map((file) => (
         <Popover key={file.id}>
-          <PopoverTrigger asChild>
-            <div
-              className={cn(
-                "group relative flex h-8 cursor-pointer select-none items-center gap-1.5 rounded-md border",
-                "border-border px-1.5 font-medium text-sm transition-all hover:bg-accent hover:text-accent-foreground",
-                "dark:hover:bg-accent/50",
-              )}
-            >
-              <div className="relative size-5 shrink-0">
-                <div
-                  className={cn(
-                    "absolute inset-0 flex size-5 items-center justify-center overflow-hidden",
-                    "rounded bg-background transition-opacity group-hover:opacity-0",
-                  )}
-                >
-                  <div className="flex size-5 items-center justify-center text-muted-foreground">
-                    {isImage(file) ? (
-                      <ImageIcon className="size-3" />
-                    ) : (
-                      <PaperclipIcon className="size-3" />
+          <PopoverTrigger
+            render={(props) => (
+              <div
+                className={cn(
+                  "group relative flex h-8 cursor-pointer select-none items-center gap-1.5 rounded-md border",
+                  "border-border px-1.5 font-medium text-sm transition-all hover:bg-accent hover:text-accent-foreground",
+                  "dark:hover:bg-accent/50",
+                )}
+                {...props}
+              >
+                <div className="relative size-5 shrink-0">
+                  <div
+                    className={cn(
+                      "absolute inset-0 flex size-5 items-center justify-center overflow-hidden",
+                      "rounded bg-background transition-opacity group-hover:opacity-0",
                     )}
+                  >
+                    <div className="flex size-5 items-center justify-center text-muted-foreground">
+                      {isImage(file) ? (
+                        <ImageIcon className="size-3" />
+                      ) : (
+                        <PaperclipIcon className="size-3" />
+                      )}
+                    </div>
                   </div>
+                  <Button
+                    aria-label="Remove attachment"
+                    className={cn(
+                      "absolute inset-0 size-5 cursor-pointer rounded p-0 opacity-0 transition-opacity",
+                      "group-hover:pointer-events-auto group-hover:opacity-100 [&>svg]:size-2.5",
+                    )}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      usePrompt.getState().removeFile(file.id);
+                    }}
+                    type="button"
+                    variant="ghost"
+                  >
+                    <XIcon />
+                    <span className="sr-only">Remove</span>
+                  </Button>
                 </div>
-                <Button
-                  aria-label="Remove attachment"
-                  className={cn(
-                    "absolute inset-0 size-5 cursor-pointer rounded p-0 opacity-0 transition-opacity",
-                    "group-hover:pointer-events-auto group-hover:opacity-100 [&>svg]:size-2.5",
-                  )}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    usePrompt.getState().removeFile(file.id);
-                  }}
-                  type="button"
-                  variant="ghost"
-                >
-                  <XIcon />
-                  <span className="sr-only">Remove</span>
-                </Button>
-              </div>
 
-              <span className="flex-1 truncate">{file.file.name}</span>
-            </div>
-          </PopoverTrigger>
+                <span className="flex-1 truncate">{file.file.name}</span>
+              </div>
+            )}
+          />
           <PopoverContent align="start" className="w-auto p-2">
             <div className="w-auto space-y-3">
               {isImage(file) && (
@@ -272,7 +275,7 @@ function PromptInputSubmit({ status }: { status: ChatStatus }) {
 
 interface ChatInputProps {
   status: ChatStatus;
-  handleSubmit: (event: FormEvent<HTMLFormElement>) => void;
+  handleSubmit: SubmitEventHandler<HTMLFormElement>;
 }
 
 export function ChatInput({ status, handleSubmit }: ChatInputProps) {

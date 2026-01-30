@@ -3,8 +3,12 @@ import { BrainIcon, ChevronDownIcon } from "lucide-react";
 import type { ComponentProps, ReactNode } from "react";
 import { createContext, memo, useContext, useEffect, useState } from "react";
 
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { Markdown } from "@/components/ui/markdown";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/shadcn/collapsible";
+import { Markdown } from "@/components/shadcn/markdown";
 import { cn } from "@/lib/utils";
 import { Shimmer } from "./shimmer";
 

@@ -8,8 +8,8 @@ import {
 } from "@/components/ai-elements/conversation";
 import { ChatInput } from "@/components/chat-input";
 import { ChatMessages } from "@/components/chat-message";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
+import { Alert, AlertDescription, AlertTitle } from "@/components/shadcn/alert";
+import { Button } from "@/components/shadcn/button";
 import {
   Empty,
   EmptyContent,
@@ -17,7 +17,7 @@ import {
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
-} from "@/components/ui/empty";
+} from "@/components/shadcn/empty";
 import { useChat } from "@/hooks/use-chat";
 import { useNavigation } from "@/hooks/use-navigation";
 import { safeErrorString } from "@/lib/errors";

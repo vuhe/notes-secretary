@@ -9,13 +9,12 @@ import { useTheme } from "next-themes";
 import type { CSSProperties } from "react";
 import { Toaster as Sonner, type ToasterProps } from "sonner";
 
-export const Toaster = ({ ...props }: ToasterProps) => {
+const Toaster = ({ ...props }: ToasterProps) => {
   const { theme = "system" } = useTheme();
 
   return (
     <Sonner
       position="top-center"
-      richColors
       theme={theme as ToasterProps["theme"]}
       className="toaster group"
       icons={{
@@ -33,7 +32,14 @@ export const Toaster = ({ ...props }: ToasterProps) => {
           "--border-radius": "var(--radius)",
         } as CSSProperties
       }
+      toastOptions={{
+        classNames: {
+          toast: "cn-toast",
+        },
+      }}
       {...props}
     />
   );
 };
+
+export { Toaster };

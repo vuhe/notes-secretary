@@ -71,7 +71,11 @@
   },
   "overrides": [
     {
-      "includes": ["src/components/ai-elements/*.tsx", "src/components/ui/*.tsx"],
+      "includes": [
+        "src/components/ai-elements/*.tsx",
+        "src/components/shadcn/*.tsx",
+        "src/components/ui/*.tsx"
+      ],
       "linter": {
         "rules": {
           "style": {

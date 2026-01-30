@@ -1,15 +1,15 @@
 import { CheckIcon, DramaIcon } from "lucide-react";
 import { type ComponentProps, useState } from "react";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/shadcn/button";
 import {
   Command,
   CommandEmpty,
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/components/ui/command";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+} from "@/components/shadcn/command";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/shadcn/popover";
 import { useConfig } from "@/hooks/use-config";
 import { usePrompt } from "@/hooks/use-prompt";
 import { cn } from "@/lib/utils";
@@ -25,19 +25,21 @@ export function ChatPersona() {
 
   return (
     <Popover onOpenChange={setOpen} open={open}>
-      <PopoverTrigger asChild>
-        <Button type="button" variant="outline">
-          <DramaIcon size={16} />
-          <span
-            className={cn(
-              "hidden @[760px]/header:block",
-              selected === undefined && "text-muted-foreground",
-            )}
-          >
-            {selected?.id ?? "请选择 Persona"}
-          </span>
-        </Button>
-      </PopoverTrigger>
+      <PopoverTrigger
+        render={(props) => (
+          <Button type="button" variant="outline" {...props}>
+            <DramaIcon size={16} />
+            <span
+              className={cn(
+                "hidden @[760px]/header:block",
+                selected === undefined && "text-muted-foreground",
+              )}
+            >
+              {selected?.id ?? "请选择 Persona"}
+            </span>
+          </Button>
+        )}
+      />
       <PopoverContent className="w-45 p-0 **:data-[slot=dialog-close]:top-3">
         <Command className="**:data-[slot=command-input-wrapper]:h-auto">
           <CommandInput placeholder="搜索 Persona..." />

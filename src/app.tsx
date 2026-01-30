@@ -5,9 +5,9 @@ import { ChatPersona } from "@/components/chat-persona";
 import { ChatTitle } from "@/components/chat-title";
 import { ChatUsage } from "@/components/chat-usage";
 import { NavSidebar } from "@/components/navigation";
-import { ButtonGroup } from "@/components/ui/button-group";
-import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { Toaster } from "@/components/ui/sonner";
+import { ButtonGroup } from "@/components/shadcn/button-group";
+import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/shadcn/sidebar";
+import { Toaster } from "@/components/shadcn/sonner";
 import { useConfig } from "@/hooks/use-config";
 import { cn } from "@/lib/utils";
 

@@ -3,7 +3,7 @@ import { MessageSquareMoreIcon } from "lucide-react";
 import { AnimatePresence, type HTMLMotionProps, motion } from "motion/react";
 import { useEffect, useId, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/shadcn/button";
 import {
   Dialog,
   DialogClose,
@@ -13,9 +13,9 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Field, FieldError, FieldGroup, FieldLabel, FieldSet } from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
+} from "@/components/shadcn/dialog";
+import { Field, FieldError, FieldGroup, FieldLabel, FieldSet } from "@/components/shadcn/field";
+import { Input } from "@/components/shadcn/input";
 import { useConfig } from "@/hooks/use-config";
 import { useNavigation } from "@/hooks/use-navigation";
 import { ChatMetadataSchema } from "@/types/chat-metadata";
@@ -74,12 +74,14 @@ export function ChatTitle() {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogTrigger asChild>
-        <Button variant="outline" className="text-lg" disabled={title === undefined}>
-          <MessageSquareMoreIcon size={16} />
-          <span className="hidden @[760px]/header:block">{title ?? "新对话"}</span>
-        </Button>
-      </DialogTrigger>
+      <DialogTrigger
+        render={(props) => (
+          <Button variant="outline" {...props} className="text-lg" disabled={title === undefined}>
+            <MessageSquareMoreIcon size={16} />
+            <span className="hidden @[760px]/header:block">{title ?? "新对话"}</span>
+          </Button>
+        )}
+      />
       <DialogContent className="sm:max-w-110 max-h-full">
         <DialogHeader>
           <DialogTitle>对话信息</DialogTitle>
@@ -116,9 +118,13 @@ export function ChatTitle() {
                 <Button variant="destructive" className="mr-auto" onClick={handleDelete}>
                   删除
                 </Button>
-                <DialogClose asChild>
-                  <Button variant="outline">取消</Button>
-                </DialogClose>
+                <DialogClose
+                  render={(props) => (
+                    <Button variant="outline" {...props}>
+                      取消
+                    </Button>
+                  )}
+                />
                 <Button onClick={onSubmit}>保存</Button>
               </AnimateDiv>
             ) : deleteConfirm === 1 ? (

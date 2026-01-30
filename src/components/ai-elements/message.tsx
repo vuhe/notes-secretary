@@ -2,10 +2,15 @@ import type { UIMessage } from "ai";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import type { ComponentProps, HTMLAttributes, ReactElement } from "react";
 import { createContext, memo, useContext, useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { ButtonGroup, ButtonGroupText } from "@/components/ui/button-group";
-import { Markdown } from "@/components/ui/markdown";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Button } from "@/components/shadcn/button";
+import { ButtonGroup, ButtonGroupText } from "@/components/shadcn/button-group";
+import { Markdown } from "@/components/shadcn/markdown";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/shadcn/tooltip";
 import { cn } from "@/lib/utils";
 
 export type MessageProps = HTMLAttributes<HTMLDivElement> & {
@@ -60,18 +65,18 @@ export const MessageAction = ({
   size = "icon-sm",
   ...props
 }: MessageActionProps) => {
-  const button = (
-    <Button size={size} type="button" variant={variant} {...props}>
-      {children}
-      <span className="sr-only">{label || tooltip}</span>
-    </Button>
-  );
-
   if (tooltip) {
     return (
       <TooltipProvider>
         <Tooltip>
-          <TooltipTrigger asChild>{button}</TooltipTrigger>
+          <TooltipTrigger
+            render={(trigger) => (
+              <Button size={size} type="button" variant={variant} {...trigger} {...props}>
+                {children}
+                <span className="sr-only">{label || tooltip}</span>
+              </Button>
+            )}
+          />
           <TooltipContent>
             <p>{tooltip}</p>
           </TooltipContent>
@@ -80,7 +85,12 @@ export const MessageAction = ({
     );
   }
 
-  return button;
+  return (
+    <Button size={size} type="button" variant={variant} {...props}>
+      {children}
+      <span className="sr-only">{label || tooltip}</span>
+    </Button>
+  );
 };
 
 interface MessageBranchContextType {

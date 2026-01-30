@@ -8,7 +8,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar";
+} from "@/components/shadcn/sidebar";
 import { useConfig } from "@/hooks/use-config";
 import { useNavigation } from "@/hooks/use-navigation";
 

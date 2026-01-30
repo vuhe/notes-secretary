@@ -10,8 +10,8 @@ import {
 } from "lucide-react";
 import type { ComponentProps, HTMLAttributes, ReactNode } from "react";
 import { createContext, useContext, useMemo } from "react";
-import { Button } from "@/components/ui/button";
-import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
+import { Button } from "@/components/shadcn/button";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/shadcn/hover-card";
 import { cn } from "@/lib/utils";
 
 // ============================================================================
@@ -346,12 +346,8 @@ export const AttachmentRemove = ({
 
 export type AttachmentHoverCardProps = ComponentProps<typeof HoverCard>;
 
-export const AttachmentHoverCard = ({
-  openDelay = 0,
-  closeDelay = 0,
-  ...props
-}: AttachmentHoverCardProps) => (
-  <HoverCard closeDelay={closeDelay} openDelay={openDelay} {...props} />
+export const AttachmentHoverCard = ({ ...props }: AttachmentHoverCardProps) => (
+  <HoverCard {...props} />
 );
 
 export type AttachmentHoverCardTriggerProps = ComponentProps<typeof HoverCardTrigger>;
