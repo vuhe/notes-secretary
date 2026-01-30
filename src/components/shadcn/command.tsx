@@ -1,14 +1,6 @@
 import { Command as CommandPrimitive } from "cmdk";
 import { SearchIcon } from "lucide-react";
-import type { ComponentProps, ReactNode } from "react";
-
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/shadcn/dialog";
+import type { ComponentProps } from "react";
 import { cn } from "@/lib/utils";
 
 function Command({ className, ...props }: ComponentProps<typeof CommandPrimitive>) {
@@ -21,46 +13,6 @@ function Command({ className, ...props }: ComponentProps<typeof CommandPrimitive
       )}
       {...props}
     />
-  );
-}
-
-function CommandDialog({
-  title = "Command Palette",
-  description = "Search for a command to run...",
-  children,
-  className,
-  showCloseButton = true,
-  ...props
-}: Omit<ComponentProps<typeof Dialog>, "children"> & {
-  title?: string;
-  description?: string;
-  className?: string;
-  showCloseButton?: boolean;
-  children: ReactNode;
-}) {
-  return (
-    <Dialog {...props}>
-      <DialogHeader className="sr-only">
-        <DialogTitle>{title}</DialogTitle>
-        <DialogDescription>{description}</DialogDescription>
-      </DialogHeader>
-      <DialogContent
-        className={cn("overflow-hidden p-0", className)}
-        showCloseButton={showCloseButton}
-      >
-        <Command
-          className={cn(
-            "[&_[cmdk-group-heading]]:text-muted-foreground **:data-[slot=command-input-wrapper]:h-12",
-            "[&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group]]:px-2",
-            "[&_[cmdk-group]:not([hidden])_~[cmdk-group]]:pt-0 [&_[cmdk-input-wrapper]_svg]:h-5",
-            "[&_[cmdk-input-wrapper]_svg]:w-5 [&_[cmdk-input]]:h-12 [&_[cmdk-item]]:px-2 [&_[cmdk-item]]:py-3",
-            "[&_[cmdk-item]_svg]:h-5 [&_[cmdk-item]_svg]:w-5",
-          )}
-        >
-          {children}
-        </Command>
-      </DialogContent>
-    </Dialog>
   );
 }
 
@@ -136,7 +88,7 @@ function CommandItem({ className, ...props }: ComponentProps<typeof CommandPrimi
       className={cn(
         "data-[selected=true]:bg-accent data-[selected=true]:text-accent-foreground",
         "[&_svg:not([class*='text-'])]:text-muted-foreground relative flex cursor-default items-center gap-2",
-        "rounded-sm px-2 py-1.5 text-sm outline-hidden select-none data-[disabled=true]:pointer-events-none",
+        "px-2 py-1.5 text-sm outline-hidden select-none data-[disabled=true]:pointer-events-none",
         "data-[disabled=true]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0",
         "[&_svg:not([class*='size-'])]:size-4",
         className,
@@ -158,7 +110,6 @@ function CommandShortcut({ className, ...props }: ComponentProps<"span">) {
 
 export {
   Command,
-  CommandDialog,
   CommandInput,
   CommandList,
   CommandEmpty,
