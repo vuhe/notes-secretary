@@ -4,7 +4,6 @@ import {
   GlobeIcon,
   ImageIcon,
   Loader2Icon,
-  PaperclipIcon,
   SquareIcon,
   XIcon,
 } from "lucide-react";
@@ -14,46 +13,25 @@ import {
   type KeyboardEventHandler,
   type SubmitEventHandler,
   useEffect,
-  useLayoutEffect,
   useRef,
   useState,
 } from "react";
 
-import { Button } from "@/components/shadcn/button";
+import {
+  Attachment,
+  AttachmentInfo,
+  AttachmentPreview,
+  AttachmentRemove,
+  Attachments,
+} from "@/components/ai-elements/attachments";
+import { ChatPersona } from "@/components/chat-persona";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupButton,
   InputGroupTextarea,
 } from "@/components/shadcn/input-group";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/shadcn/popover";
-import { Skeleton } from "@/components/shadcn/skeleton";
-import { type AttachmentPart, usePrompt } from "@/hooks/use-prompt";
-import { cn } from "@/lib/utils";
-
-function PromptInputImage({ file }: { file: File }) {
-  const [src, setSrc] = useState("");
-
-  useLayoutEffect(() => {
-    const blob = URL.createObjectURL(file);
-    setSrc(blob);
-    return () => URL.revokeObjectURL(blob);
-  }, [file]);
-
-  if (!src) {
-    return <Skeleton className="h-96 w-md max-h-full max-w-full" />;
-  }
-
-  return (
-    <img
-      alt={file.name}
-      src={src}
-      className="max-h-full max-w-full object-contain"
-      height={384}
-      width={448}
-    />
-  );
-}
+import { usePrompt } from "@/hooks/use-prompt";
 
 function PromptInputAttachments() {
   const files = usePrompt((state) => state.files);
@@ -61,81 +39,20 @@ function PromptInputAttachments() {
     return null;
   }
 
-  const isImage = (part: AttachmentPart) => {
-    return part.file.type.startsWith("image/");
-  };
-
   return (
-    <div className="flex flex-wrap items-center gap-2 px-3 pt-3 w-full">
-      {files.map((file) => (
-        <Popover key={file.id}>
-          <PopoverTrigger
-            render={(props) => (
-              <div
-                className={cn(
-                  "group relative flex h-8 cursor-pointer select-none items-center gap-1.5 rounded-md border",
-                  "border-border px-1.5 font-medium text-sm transition-all hover:bg-accent hover:text-accent-foreground",
-                  "dark:hover:bg-accent/50",
-                )}
-                {...props}
-              >
-                <div className="relative size-5 shrink-0">
-                  <div
-                    className={cn(
-                      "absolute inset-0 flex size-5 items-center justify-center overflow-hidden",
-                      "rounded bg-background transition-opacity group-hover:opacity-0",
-                    )}
-                  >
-                    <div className="flex size-5 items-center justify-center text-muted-foreground">
-                      {isImage(file) ? (
-                        <ImageIcon className="size-3" />
-                      ) : (
-                        <PaperclipIcon className="size-3" />
-                      )}
-                    </div>
-                  </div>
-                  <Button
-                    aria-label="Remove attachment"
-                    className={cn(
-                      "absolute inset-0 size-5 cursor-pointer rounded p-0 opacity-0 transition-opacity",
-                      "group-hover:pointer-events-auto group-hover:opacity-100 [&>svg]:size-2.5",
-                    )}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      usePrompt.getState().removeFile(file.id);
-                    }}
-                    type="button"
-                    variant="ghost"
-                  >
-                    <XIcon />
-                    <span className="sr-only">Remove</span>
-                  </Button>
-                </div>
-
-                <span className="flex-1 truncate">{file.file.name}</span>
-              </div>
-            )}
-          />
-          <PopoverContent align="start" className="w-auto p-2">
-            <div className="w-auto space-y-3">
-              {isImage(file) && (
-                <div className="flex max-h-96 w-96 items-center justify-center overflow-hidden rounded-md border">
-                  <PromptInputImage file={file.file} />
-                </div>
-              )}
-              <div className="flex items-center gap-2.5">
-                <div className="min-w-0 flex-1 space-y-1 px-0.5">
-                  <h4 className="truncate font-semibold text-sm leading-none">{file.file.name}</h4>
-                  <p className="truncate font-mono text-muted-foreground text-xs">
-                    {file.file.type}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </PopoverContent>
-        </Popover>
+    <Attachments variant="inline">
+      {files.map((attachment) => (
+        <Attachment
+          data={attachment}
+          key={attachment.id}
+          onRemove={() => usePrompt.getState().removeFile(attachment.id)}
+        >
+          <AttachmentPreview />
+          <AttachmentInfo />
+          <AttachmentRemove />
+        </Attachment>
       ))}
-    </div>
+    </Attachments>
   );
 }
 
@@ -200,7 +117,7 @@ function PromptInputTextarea() {
 
   return (
     <InputGroupTextarea
-      className="field-sizing-content max-h-48 min-h-16 pb-0"
+      className="field-sizing-content max-h-48 min-h-16 py-0"
       name="message"
       value={text}
       placeholder="询问任何问题"
@@ -307,7 +224,10 @@ export function ChatInput({ status, handleSubmit }: ChatInputProps) {
   return (
     <form className="w-full max-w-190 px-2 pb-8" onSubmit={handleSubmit}>
       <InputGroup className="overflow-hidden">
-        <PromptInputAttachments />
+        <InputGroupAddon align="block-end" className="order-first flex-wrap gap-1">
+          <ChatPersona />
+          <PromptInputAttachments />
+        </InputGroupAddon>
         <div className="contents">
           <PromptInputTextarea />
         </div>

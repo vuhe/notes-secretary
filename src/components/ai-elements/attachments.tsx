@@ -8,10 +8,19 @@ import {
   VideoIcon,
   XIcon,
 } from "lucide-react";
-import type { ComponentProps, HTMLAttributes, ReactNode } from "react";
-import { createContext, useContext, useMemo } from "react";
+import {
+  type ComponentProps,
+  createContext,
+  type HTMLAttributes,
+  type ReactNode,
+  useContext,
+  useLayoutEffect,
+  useMemo,
+  useState,
+} from "react";
 import { Button } from "@/components/shadcn/button";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/shadcn/hover-card";
+import type { AttachmentPart } from "@/hooks/use-prompt";
 import { cn } from "@/lib/utils";
 
 // ============================================================================
@@ -19,6 +28,7 @@ import { cn } from "@/lib/utils";
 // ============================================================================
 
 export type AttachmentData =
+  | AttachmentPart
   | (FileUIPart & { id: string })
   | (SourceDocumentUIPart & { id: string });
 
@@ -41,7 +51,7 @@ export const getMediaCategory = (data: AttachmentData): AttachmentMediaCategory 
     return "source";
   }
 
-  const mediaType = data.mediaType ?? "";
+  const mediaType = data.type === "attachment" ? data.file.type : (data.mediaType ?? "");
 
   if (mediaType.startsWith("image/")) {
     return "image";
@@ -65,7 +75,8 @@ export const getAttachmentLabel = (data: AttachmentData): string => {
   }
 
   const category = getMediaCategory(data);
-  return data.filename || (category === "image" ? "Image" : "Attachment");
+  const filename = data.type === "attachment" ? data.file.name : data.filename;
+  return filename || (category === "image" ? "Image" : "Attachment");
 };
 
 // ============================================================================
@@ -196,6 +207,15 @@ export const AttachmentPreview = ({
 
   const iconSize = variant === "inline" ? "size-3" : "size-4";
 
+  const [src, setSrc] = useState("");
+
+  useLayoutEffect(() => {
+    if (data.type !== "attachment") return;
+    const blob = URL.createObjectURL(data.file);
+    setSrc(blob);
+    return () => URL.revokeObjectURL(blob);
+  }, [data]);
+
   const renderImage = (url: string, filename: string | undefined, isGrid: boolean) =>
     isGrid ? (
       <img
@@ -223,9 +243,15 @@ export const AttachmentPreview = ({
     if (mediaCategory === "image" && data.type === "file" && data.url) {
       return renderImage(data.url, data.filename, variant === "grid");
     }
+    if (mediaCategory === "image" && data.type === "attachment" && src.length > 0) {
+      return renderImage(src, data.file.name, variant === "grid");
+    }
 
     if (mediaCategory === "video" && data.type === "file" && data.url) {
       return <video className="size-full object-cover" muted src={data.url} />;
+    }
+    if (mediaCategory === "video" && data.type === "attachment" && src.length > 0) {
+      return <video className="size-full object-cover" muted src={src} />;
     }
 
     const iconMap: Record<AttachmentMediaCategory, typeof ImageIcon> = {
@@ -272,6 +298,7 @@ export const AttachmentInfo = ({
 }: AttachmentInfoProps) => {
   const { data, variant } = useAttachmentContext();
   const label = getAttachmentLabel(data);
+  const mediaType = data.type === "attachment" ? data.file.type : data.mediaType;
 
   if (variant === "grid") {
     return null;
@@ -280,8 +307,8 @@ export const AttachmentInfo = ({
   return (
     <div className={cn("min-w-0 flex-1", className)} {...props}>
       <span className="block truncate">{label}</span>
-      {showMediaType && data.mediaType && (
-        <span className="block truncate text-muted-foreground text-xs">{data.mediaType}</span>
+      {showMediaType && mediaType && (
+        <span className="block truncate text-muted-foreground text-xs">{mediaType}</span>
       )}
     </div>
   );

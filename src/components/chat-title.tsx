@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { MessageSquareMoreIcon } from "lucide-react";
 import { AnimatePresence, type HTMLMotionProps, motion } from "motion/react";
-import { useEffect, useId, useState } from "react";
+import { type ComponentProps, useEffect, useId, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Button } from "@/components/shadcn/button";
 import {
@@ -18,6 +18,7 @@ import { Field, FieldError, FieldGroup, FieldLabel, FieldSet } from "@/component
 import { Input } from "@/components/shadcn/input";
 import { useConfig } from "@/hooks/use-config";
 import { useNavigation } from "@/hooks/use-navigation";
+import { cn } from "@/lib/utils";
 import { ChatMetadataSchema } from "@/types/chat-metadata";
 
 function AnimateDiv(props: HTMLMotionProps<"div">) {
@@ -32,7 +33,7 @@ function AnimateDiv(props: HTMLMotionProps<"div">) {
   );
 }
 
-export function ChatTitle() {
+export function ChatTitle({ className }: Pick<ComponentProps<typeof Button>, "className">) {
   const [open, setOpen] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState(2);
 
@@ -76,7 +77,12 @@ export function ChatTitle() {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger
         render={(props) => (
-          <Button variant="outline" {...props} className="text-lg" disabled={title === undefined}>
+          <Button
+            variant="ghost"
+            {...props}
+            className={cn(props.className, "text-lg", className)}
+            disabled={title === undefined}
+          >
             <MessageSquareMoreIcon size={16} />
             <span className="hidden @[760px]/header:block">{title ?? "新对话"}</span>
           </Button>

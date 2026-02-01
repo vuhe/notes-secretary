@@ -14,6 +14,7 @@ type ReadonlyStore<T> = UseBoundStore<ReadonlyStoreApi<T>>;
 
 export interface AttachmentPart {
   id: string;
+  type: "attachment";
   file: File;
 }
 
@@ -53,7 +54,7 @@ export const usePrompt: ReadonlyStore<PromptContext> = create((set, get) => ({
     try {
       const files = Array.from(list);
       const parts = files.map((file): AttachmentPart => {
-        return { id: fileId(), file };
+        return { id: fileId(), type: "attachment", file };
       });
       set((it) => ({ files: it.files.concat(parts) }));
     } catch (error) {
@@ -67,6 +68,7 @@ export const usePrompt: ReadonlyStore<PromptContext> = create((set, get) => ({
   addNote: (title, content) => {
     const part: AttachmentPart = {
       id: fileId(),
+      type: "attachment",
       file: new File([content], `${title}.md`, { type: "text/markdown" }),
     };
     set((it) => ({ files: it.files.concat([part]) }));

@@ -67,26 +67,6 @@ const UsageIcon = ({ persona, usage }: ChatUsageProps) => {
   );
 };
 
-const UsageTrigger = ({ persona, usage }: ChatUsageProps) => {
-  const maxTokens = persona?.maxTokens;
-  const usedPercent = maxTokens ? (usage?.totalTokens ?? 0) / maxTokens : 0;
-  const renderedPercent = new Intl.NumberFormat("en-US", {
-    style: "percent",
-    maximumFractionDigits: 1,
-  }).format(usedPercent);
-
-  return (
-    <PopoverTrigger
-      render={(props) => (
-        <Button type="button" variant="outline" {...props}>
-          <span className="font-mono font-medium text-muted-foreground">{renderedPercent}</span>
-          <UsageIcon persona={persona} usage={usage} />
-        </Button>
-      )}
-    />
-  );
-};
-
 const UsageContentHeader = ({ persona, usage }: ChatUsageProps) => {
   const maxTokens = persona?.maxTokens;
   const usedTokens = usage?.totalTokens ?? 0;
@@ -176,7 +156,13 @@ export function ChatUsage() {
 
   return (
     <Popover>
-      <UsageTrigger persona={persona} usage={usage} />
+      <PopoverTrigger
+        render={(props) => (
+          <Button type="button" variant="ghost" {...props}>
+            <UsageIcon persona={persona} usage={usage} />
+          </Button>
+        )}
+      />
       <PopoverContent align="end" className="w-50 divide-y overflow-hidden p-0 select-none gap-0">
         <UsageContentHeader persona={persona} usage={usage} />
         <UsageInput usage={usage} />

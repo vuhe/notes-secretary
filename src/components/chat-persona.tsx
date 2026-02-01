@@ -1,7 +1,6 @@
 import { CheckIcon, DramaIcon } from "lucide-react";
 import { type ComponentProps, useState } from "react";
 
-import { Button } from "@/components/shadcn/button";
 import {
   Command,
   CommandEmpty,
@@ -9,6 +8,7 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/shadcn/command";
+import { InputGroupButton } from "@/components/shadcn/input-group";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/shadcn/popover";
 import { useConfig } from "@/hooks/use-config";
 import { usePrompt } from "@/hooks/use-prompt";
@@ -27,17 +27,12 @@ export function ChatPersona() {
     <Popover onOpenChange={setOpen} open={open}>
       <PopoverTrigger
         render={(props) => (
-          <Button type="button" variant="outline" {...props}>
+          <InputGroupButton size="sm" {...props}>
             <DramaIcon size={16} />
-            <span
-              className={cn(
-                "hidden @[760px]/header:block",
-                selected === undefined && "text-muted-foreground",
-              )}
-            >
+            <span className={cn(selected === undefined && "text-muted-foreground")}>
               {selected?.id ?? "请选择 Persona"}
             </span>
-          </Button>
+          </InputGroupButton>
         )}
       />
       <PopoverContent className="w-45 p-0 **:data-[slot=dialog-close]:top-3">

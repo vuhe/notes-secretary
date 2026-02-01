@@ -1,11 +1,9 @@
 import { ThemeProvider } from "next-themes";
 import { useEffect } from "react";
 import { ChatPage } from "@/components/chat-page";
-import { ChatPersona } from "@/components/chat-persona";
 import { ChatTitle } from "@/components/chat-title";
 import { ChatUsage } from "@/components/chat-usage";
 import { NavSidebar } from "@/components/navigation";
-import { ButtonGroup } from "@/components/shadcn/button-group";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/shadcn/sidebar";
 import { Toaster } from "@/components/shadcn/sonner";
 import { useConfig } from "@/hooks/use-config";
@@ -23,24 +21,14 @@ export function App() {
         <SidebarInset>
           <header
             className={cn(
-              "@container/header flex w-full h-16 px-6 shrink-0 items-center justify-between",
+              "@container/header flex w-full h-16 px-6 border-b shrink-0 items-center justify-between",
               "transition-[width,height] ease-linear",
               "group-has-data-[collapsible=icon]/sidebar-wrapper:h-12",
             )}
           >
-            <ButtonGroup>
-              <ButtonGroup>
-                <SidebarTrigger size="default" variant="outline" />
-              </ButtonGroup>
-              <ButtonGroup className="flex justify-center text-lg">
-                <ChatTitle />
-              </ButtonGroup>
-            </ButtonGroup>
-
-            <ButtonGroup>
-              <ChatPersona />
-              <ChatUsage />
-            </ButtonGroup>
+            <SidebarTrigger size="default" />
+            <ChatTitle className="mx-auto" />
+            <ChatUsage />
           </header>
 
           <div className="flex-1 flex w-full min-h-0">
