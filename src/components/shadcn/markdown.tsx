@@ -122,7 +122,6 @@ export function Markdown({ rehypePlugins, controls, className, ...props }: Markd
       controls={controlsWithDefault}
       className={cn(className, safeId(id))}
       linkSafety={{ enabled: false }}
-      caret="circle"
       plugins={{
         code: code,
         math: math,
